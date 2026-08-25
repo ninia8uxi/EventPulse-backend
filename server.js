@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const mongoSanitize = require('express-mongo-sanitize');
 const path = require('path');
 
 dotenv.config();
@@ -13,7 +12,6 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(mongoSanitize());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.send('EventPulse API is Running!'));
@@ -25,7 +23,6 @@ app.use('/api/messages', require('./routes/messageRoutes'));
 
 const AppError = require('./utils/AppError');
 
-// FIXED CATCH-ALL ROUTE (Express 5 compatible)
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
