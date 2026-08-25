@@ -25,7 +25,8 @@ app.use('/api/messages', require('./routes/messageRoutes'));
 
 const AppError = require('./utils/AppError');
 
-app.all('*', (req, res, next) => {
+// FIXED CATCH-ALL ROUTE (Express 5 compatible)
+app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
@@ -38,4 +39,5 @@ app.use((err, req, res, next) => {
     message: err.message
   });
 });
+
 module.exports = app;
