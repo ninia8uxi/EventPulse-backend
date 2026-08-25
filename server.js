@@ -9,7 +9,23 @@ const connectDB = require('./config/db');
 connectDB();
 
 const app = express();
+// ============================================
+// 🧪 TEST ROUTES – placed first to ensure they work
+// ============================================
+console.log('✅ Server.js is loading...');
 
+app.get('/test', (req, res) => {
+  res.json({ status: 'ok', message: 'Test route works!' });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
 app.use(express.json());
 app.use(morgan('dev'));
 
