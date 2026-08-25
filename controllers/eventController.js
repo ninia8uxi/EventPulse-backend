@@ -144,3 +144,4 @@ const getEvents = asyncHandler(async (req, res, next) => {
     next(error);
   }
 });
+module.exports = { getEvents, createEvent };
