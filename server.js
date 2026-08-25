@@ -16,18 +16,19 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.send('EventPulse API is Running!'));
 
-
+// ============================================
+// ROUTES – each registered ONCE
+// ============================================
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/registrations', require('./routes/registrationRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
+app.use('/health', require('./routes/healthRoutes'));   // ✅ only once
 
-
-app.use('/health', require('./routes/healthRoutes'));
-
+// ============================================
+// ERROR HANDLERS – MUST come after all routes
+// ============================================
 const AppError = require('./utils/AppError');
-app.use('/health', require('./routes/healthRoutes'));
-
 
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
@@ -43,12 +44,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-
-const PORT = process.env.PORT || 5000;
+// ============================================
+// EXPORT for Vercel (no app.listen on Vercel)
+// ============================================
 if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
-    console.log(` Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
   });
 }
 
-module.exports = app; 
+module.exports = app;
