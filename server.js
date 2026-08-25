@@ -13,9 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
 
-// ============================================
-// ✅ HEALTH ROUTE – مباشر ومضمون
-// ============================================
+// ✅ HEALTH ROUTE – مباشر وأول حاجة
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'success',
