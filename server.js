@@ -16,10 +16,14 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.send('EventPulse API is Running!'));
 
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/registrations', require('./routes/registrationRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
+
+
+app.use('/health', require('./routes/healthRoutes'));
 
 const AppError = require('./utils/AppError');
 
@@ -37,9 +41,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
 
-module.exports = app;
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(` Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app; 
