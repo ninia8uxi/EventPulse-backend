@@ -26,6 +26,8 @@ app.use('/api/messages', require('./routes/messageRoutes'));
 app.use('/health', require('./routes/healthRoutes'));
 
 const AppError = require('./utils/AppError');
+app.use('/health', require('./routes/healthRoutes'));
+
 
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
