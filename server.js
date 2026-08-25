@@ -11,6 +11,20 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+app.use(express.json());
+app.use(morgan('dev'));
+
+// ✅ HEALTH ROUTE – placed here to ensure it works
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => res.send('EventPulse API is Running!'));
 app.use(morgan('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
