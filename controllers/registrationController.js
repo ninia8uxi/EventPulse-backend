@@ -139,3 +139,4 @@ module.exports = {
   cancelRegistration,
   getAllRegistrations
 };
+module.exports = { registerForEvent, getMyRegistrations, cancelRegistration, getAllRegistrations };
