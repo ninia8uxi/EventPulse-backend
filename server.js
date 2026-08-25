@@ -65,7 +65,7 @@ app.use(mongoSanitize());
 
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.get('/', (req, res) => res.send('EventPulse API is Running!'));
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
