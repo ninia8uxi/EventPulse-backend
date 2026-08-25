@@ -11,39 +11,33 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(express.json());
 app.use(morgan('dev'));
 
-// ✅ HEALTH ROUTE – placed here to ensure it works
+// ============================================
+// ✅ HEALTH ROUTE – مباشر ومضمون
+// ============================================
 app.get('/health', (req, res) => {
   res.status(200).json({
-    status: 'ok',
+    status: 'success',
     message: 'Server is healthy',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
   });
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.send('EventPulse API is Running!'));
-app.use(morgan('dev'));
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => res.send('EventPulse API is Running!'));
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Health check works from server.js' });
-});
 
 // ============================================
-// ROUTES – each registered ONCE
+// ROUTES
 // ============================================
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/registrations', require('./routes/registrationRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
-app.use('/health', require('./routes/healthRoutes'));   // ✅ only once
 
 // ============================================
-// ERROR HANDLERS – MUST come after all routes
+// ERROR HANDLERS
 // ============================================
 const AppError = require('./utils/AppError');
 
@@ -54,7 +48,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
-
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message
@@ -62,7 +55,7 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================
-// EXPORT for Vercel (no app.listen on Vercel)
+// EXPORT for Vercel
 // ============================================
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
