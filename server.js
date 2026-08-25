@@ -15,6 +15,9 @@ app.use(morgan('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.send('EventPulse API is Running!'));
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Health check works from server.js' });
+});
 
 // ============================================
 // ROUTES – each registered ONCE
