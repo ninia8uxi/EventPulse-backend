@@ -15,13 +15,14 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Health check route
+// Health check route (handles query strings too)
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'EventPulse API is Running!',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    query: req.query // optional: shows any query parameters
   });
 });
 
@@ -48,6 +49,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Server start
-const PORT = process.env.PORT || 5000;
+// Export for Vercel
 module.exports = app;
+
