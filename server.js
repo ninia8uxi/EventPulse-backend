@@ -15,14 +15,17 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Health check route (works even with query strings)
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'EventPulse API is Running!',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
+// ✅ Health check route (handles query strings safely)
+app.get('/health', (req, res, next) => {
+  if (req.path.startsWith('/health')) {
+    return res.status(200).json({
+      status: 'success',
+      message: 'EventPulse API is Running!',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  }
+  next();
 });
 
 // Root route
@@ -50,3 +53,4 @@ app.use((err, req, res, next) => {
 
 // Export for Vercel
 module.exports = app;
+
