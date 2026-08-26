@@ -15,14 +15,13 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Health check route (handles query strings too)
+// Health check route (works even with query strings)
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'EventPulse API is Running!',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    query: req.query // optional: shows any query parameters
+    uptime: process.uptime()
   });
 });
 
@@ -37,7 +36,7 @@ app.use('/api/messages', require('./routes/messageRoutes'));
 
 // Error handling
 app.use((req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  next(new AppError(`Can't find ${req.originalUrl.split('?')[0]} on this server!`, 404));
 });
 
 app.use((err, req, res, next) => {
@@ -51,4 +50,3 @@ app.use((err, req, res, next) => {
 
 // Export for Vercel
 module.exports = app;
-
