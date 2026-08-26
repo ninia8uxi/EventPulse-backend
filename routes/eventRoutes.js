@@ -16,11 +16,11 @@ const {
 } = require('../validators/eventValidators');
 const validate = require('../middleware/validationHandler');
 
-// Public routes
+
 router.get('/', eventQueryValidation, validate, getEvents);
 router.get('/:id', eventIdValidation, validate, getEvent);
 
-// Admin-only routes
+
 router.post(
   '/',
   requireAuth,

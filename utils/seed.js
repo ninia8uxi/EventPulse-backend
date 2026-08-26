@@ -1,4 +1,4 @@
-console.log('🚀 SEED SCRIPT STARTED...');
+console.log(' SEED SCRIPT STARTED...');
 
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -14,34 +14,34 @@ const connectDB = require('../config/db');
 
 const seedDatabase = async () => {
   try {
-    console.log('⏳ Connecting to MongoDB...');
+    console.log(' Connecting to MongoDB...');
     await connectDB();
-    console.log('✅ Connected.');
+    console.log(' Connected.');
 
-    console.log('🗑️ Dropping database...');
+    console.log(' Dropping database...');
     await mongoose.connection.db.dropDatabase();
-    console.log('✅ Database dropped.');
+    console.log('Database dropped.');
 
-    console.log('👤 Creating admin user...');
-    // No need to manually hash – the pre-save hook does it
+    console.log(' Creating admin user...');
+  
     const admin = await User.create({
       name: 'Admin User',
       email: 'admin@eventpulse.com',
       password: 'Admin@123',
       role: 'admin',
     });
-    console.log('✅ Admin created.');
+    console.log(' Admin created.');
 
-    console.log('📂 Creating categories...');
+    console.log(' Creating categories...');
     const categories = await Category.insertMany([
       { name: 'Music', description: 'Live music and concerts' },
       { name: 'Technology', description: 'Tech conferences and hackathons' },
       { name: 'Art', description: 'Art exhibitions and galleries' },
       { name: 'Sports', description: 'Sports tournaments and marathons' },
     ]);
-    console.log(`✅ ${categories.length} categories created.`);
+    console.log(` ${categories.length} categories created.`);
 
-    console.log('🎪 Creating events...');
+    console.log(' Creating events...');
     await Event.insertMany([
       {
         title: 'Summer Music Fest',
@@ -84,12 +84,12 @@ const seedDatabase = async () => {
         organizer: admin._id,
       },
     ]);
-    console.log('✅ Events created.');
+    console.log('Events created.');
 
-    console.log('🌱 🌟 Seeding completed successfully!');
+    console.log(' Seeding completed successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Seed error:', error);
+    console.error('Seed error:', error);
     process.exit(1);
   }
 };

@@ -30,15 +30,13 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Pre-save hook using async/await – no callback, no `next` needed
 UserSchema.pre('save', async function () {
-  // Only hash if password is modified (or new)
+
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// ✅ Method to compare password
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
